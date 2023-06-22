@@ -6,6 +6,7 @@ export type User = {
 };
 
 export type TweetType = {
+    id: string,
     content: string;
     user: User;
     createdAt: string;
