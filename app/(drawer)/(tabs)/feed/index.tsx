@@ -1,15 +1,34 @@
 import { Entypo } from '@expo/vector-icons';
-import { StyleSheet, View, FlatList, Pressable } from 'react-native';
+import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native';
 import { Link } from 'expo-router';
-import tweets from '../../../../assets/data/tweets';
-import Tweet from '../../../../components/Tweet';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-export default function TabOneScreen() {
+// import tweets from '../../../../assets/data/tweets'; // for testing front end
+import Tweet from '../../../../components/Tweet';
+import { listTweets } from '../../../../lib/api/tweets';
+import { ActivityIndicator } from 'react-native';
+
+export default function FeedScreen() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['tweets'],
+    queryFn: listTweets,
+  });
+
+  if (isLoading){
+    return <ActivityIndicator />;
+  }
+
+  if (error){
+    return <Text>{error.message}</Text>
+  }
+
+
   return (
     <View style={styles.page}>
       <FlatList 
-        data={tweets} 
-        renderItem={({item}) => <Tweet tweet={item} />}
+        data={data} 
+        renderItem={({ item }) => <Tweet tweet={item} />}
       />
         <Link href='/new-tweet' asChild>
           <Entypo 
