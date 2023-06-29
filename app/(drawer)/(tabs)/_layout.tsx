@@ -4,6 +4,10 @@ import { Pressable, useColorScheme, Image } from 'react-native';
 
 import Colors from '../../../constants/Colors';
 
+export const unstable_settings = {
+  initialRouteName: 'feed',
+};
+
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
@@ -36,9 +40,9 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
       }}>
       <Tabs.Screen
-        name="index"
+        name="feed"
         options={{
-          title: 'Tab One',
+          title: 'Feed',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -54,7 +58,8 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
-          headerLeft: () => (<AvatarHeader />)
+          headerLeft: () => <AvatarHeader />,
+          
         }}
       />
       <Tabs.Screen
