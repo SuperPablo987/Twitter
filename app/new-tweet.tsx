@@ -1,6 +1,17 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, Pressable, SafeAreaView } from 'react-native';
 import { Link, useRouter } from 'expo-router';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Image, 
+    TextInput, 
+    Pressable, 
+    SafeAreaView,
+    ActivityIndicator,
+    } from 'react-native';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTweet } from '../lib/api/tweets';
 
 const user = {
     id: 'u1',
@@ -11,25 +22,43 @@ const user = {
 };
 
 export default function NewTweet() {
-    const [text, setText] = useState("");
+    const [text, setText] = useState('');
     const router = useRouter();
 
+    const QueryClient = useQueryClient();
 
+const { mutateAsync, isLoading, isError, error } = useMutation({
+    mutationFn: createTweet,
+    onSuccess: (data) => {
+        //QueryClient.invalidateQueries({ queryKey: ['tweets'] })
+        QueryClient.setQueriesData(['tweets'], (existingTweets) => {
+            
+            return [data, ...existingTweets,];
+        });
+    },
+});
 
-    const onTweetPress = () =>{
-        console.warn('Posting the tweet:', text);
+    const onTweetPress = async () => {
 
-        setText('');
-        router.back();
+        try{
+            await mutateAsync({ content: text });
+            
+            setText('');
+            router.back();
+        }
+        catch (e) {
+            console.log('Error:', e.message);
+        }
     };
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             <View style={styles.container}>
                 <View style={styles.buttonContainer}>
-                    <Link href="../" style={{fontSize: 18}}>
+                    <Link href="../" style={{ fontSize: 18 }}>
                         Cancel
                     </Link>
+                    {isLoading && <ActivityIndicator />}
                     <Pressable onPress={onTweetPress} style={styles.button}>
                         <Text style={styles.buttonText}>
                             Tweet
@@ -45,13 +74,14 @@ export default function NewTweet() {
                         placeholder="What's happening?" 
                         multiline 
                         numberOfLines={5}
-                        style={{flex: 1}}
-                        />
+                        style={{ flex: 1 }}
+                    />
                 </View>
+                {isError && <Text>Error: {error.message}</Text>}
             </View>
         </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     button:{
