@@ -1,15 +1,28 @@
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
+// import { useMutation } from '@tanstack/react-query'; //alternate login method using react-query
+import { login } from '../../lib/api/auth';
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
     const router = useRouter();
 
+    // code for alternate login method using react-query
+    // const {} = useMutation({
+    //     mutationFn: login,
+    // });
+
     const onSignIn = async () => {
         console.warn("Sign in: ", email);
+        try{
 
-        router.push({ pathname:'/authenticate', params: { email }});
+            await login({ email })
+            
+            router.push({ pathname:'/authenticate', params: { email }});
+        }catch (e: any) {
+            Alert.alert('Error', e.message);
+        }
     }
 
   return (

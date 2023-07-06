@@ -22,4 +22,4 @@ in VS Code terminal:
 npm i @tanstack/react-query
 
 
-1:11:58
+1:51:37

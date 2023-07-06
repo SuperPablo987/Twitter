@@ -46,7 +46,7 @@ const { mutateAsync, isLoading, isError, error } = useMutation({
             setText('');
             router.back();
         }
-        catch (e) {
+        catch (e: any) {
             console.log('Error:', e.message);
         }
     };
