@@ -28,7 +28,7 @@ const SignIn = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Sign In or Sign Up</Text>
-      <TextInput placeholder='Email' value={email} onChangeText={setEmail} style={styles.input}/>
+      <TextInput placeholder='Email' value={email} onChangeText={setEmail} style={styles.input} autoCapitalize="none"/>
 
       <Pressable style={styles.button} onPress={onSignIn}>
         <Text style={styles.buttonText}>Sign in</Text>
