@@ -21,5 +21,9 @@ in VS Code terminal:
 
 npm i @tanstack/react-query
 
+npx expo install expo-secure-store
+
+
+
 
 2:15:37
