@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 
 const AuthContext = createContext({});
 
-const AuthContextProvider = ({children}: PropsWithChildren) => {
+const AuthContextProvider = ({ children }: PropsWithChildren) => {
     const [authToken, setAuthToken] = useState<string | null>(null);
     const segments = useSegments();
     const router = useRouter();
@@ -27,7 +27,6 @@ const AuthContextProvider = ({children}: PropsWithChildren) => {
             if (res) {
                 setAuthToken(res);
             }
-            setAuthToken(res);
         };
         loadAuthToken();
     }, []);
@@ -37,8 +36,15 @@ const AuthContextProvider = ({children}: PropsWithChildren) => {
         setAuthToken(newToken);
     };
 
+    const removeAuthToken = async () => {
+        await SecureStore.deleteItemAsync('authToken');
+        setAuthToken(null);
+    };
+
     return (
-        <AuthContext.Provider value={{ authToken, updateAuthToken }}> 
+        <AuthContext.Provider 
+            value={{ authToken, updateAuthToken, removeAuthToken }}
+        > 
             {children}
         </AuthContext.Provider>
     );

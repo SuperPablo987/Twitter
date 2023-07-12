@@ -12,7 +12,7 @@ import {
     } from 'react-native';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createTweet } from '../lib/api/tweets';
+import { useTweetsApi } from '../lib/api/tweets';
 
 const user = {
     id: 'u1',
@@ -26,21 +26,21 @@ export default function NewTweet() {
     const [text, setText] = useState('');
     const router = useRouter();
 
-    const QueryClient = useQueryClient();
+    const { createTweet } = useTweetsApi();
+
+    const queryClient = useQueryClient();
 
 const { mutateAsync, isLoading, isError, error } = useMutation({
     mutationFn: createTweet,
     onSuccess: (data) => {
         //QueryClient.invalidateQueries({ queryKey: ['tweets'] })
-        QueryClient.setQueriesData(['tweets'], (existingTweets) => {
-            
+        queryClient.setQueriesData(['tweets'], (existingTweets) => {
             return [data, ...existingTweets,];
         });
     },
 });
 
     const onTweetPress = async () => {
-
         try{
             await mutateAsync({ content: text });
             

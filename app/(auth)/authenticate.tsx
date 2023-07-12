@@ -1,6 +1,7 @@
 import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { useSearchParams } from 'expo-router';
+
 import { authenticate } from '../../lib/api/auth';
 import { useAuth } from '../../context/AuthContext';
 
@@ -18,13 +19,14 @@ const Authenticate = () => {
             const res = await authenticate({ email, emailToken: code });
             await updateAuthToken(res.authToken);
         } catch (e: any){
-            Alert.alert("Error", "Email code doesn't match")
+            Alert.alert("Error", "Email code doesn't match");
         }
     };
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>One-Time Email Passcode</Text>
+      
       <TextInput 
         placeholder='Email code' 
         value={code} 

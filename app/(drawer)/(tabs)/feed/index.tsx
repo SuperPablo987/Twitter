@@ -6,10 +6,12 @@ import { useQuery } from '@tanstack/react-query';
 
 // import tweets from '../../../../assets/data/tweets'; // for testing front end
 import Tweet from '../../../../components/Tweet';
-import { listTweets } from '../../../../lib/api/tweets';
+import { useTweetsApi } from '../../../../lib/api/tweets';
 import { ActivityIndicator } from 'react-native';
 
 export default function FeedScreen() {
+  const { listTweets } = useTweetsApi();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['tweets'],
     queryFn: listTweets,
